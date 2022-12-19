@@ -4,7 +4,8 @@
 
 Matrix2d::Matrix2d(int _nl, int _nc)
     : nl(_nc),
-      nc(_nc)
+      nc(_nc),
+      count(0)
 {
     m = new float *[_nl];
 
@@ -24,33 +25,39 @@ Matrix2d::~Matrix2d()
     delete m;
 }
 
-int Matrix2d::xlen()
-{
-    return nc;
-}
+// Get # of cols and lines
 
-int Matrix2d::ylen()
-{
-    return nl;
-}
+int Matrix2d::xlen() { return nc; }
+int Matrix2d::ylen() { return nl; }
 
-float &Matrix2d::operator()(int l, int c)
-{
-    return m[l][c];
-}
+// Access elements at the line l and col c
 
-float Matrix2d::operator()(int l, int c) const
-{
-    return m[l][c];
-}
+float &Matrix2d::operator()(int l, int c) { return m[l][c]; }
+float Matrix2d::operator()(int l, int c) const { return m[l][c]; }
+
+// Print matrix on the stantard output stream
 
 std::ostream &operator<<(std::ostream &os, Matrix2d &m)
 {
-    for (int l = 0; l < m.xlen(); l++)
+    for (int l = 0; l < m.ylen(); l++)
     {
-        for (int c = 0; c < m.ylen(); c++)
+        for (int c = 0; c < m.xlen(); c++)
             os << m(l, c) << " ";
         os << std::endl;
     }
+
     return os;
+}
+
+// Push lines to the end of the matrix
+
+void Matrix2d::push(float v[])
+{
+    if (count == nl)
+        count = 0;
+
+    for (int l = 0; l < nc; l++)
+        m[count][l] = v[l];
+
+    count++;
 }

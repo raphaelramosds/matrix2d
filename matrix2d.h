@@ -9,16 +9,20 @@ class Matrix2d
     int nc;
     float **m;
 
+    int count;
+
 public:
     Matrix2d(int _nl, int _nc);
     ~Matrix2d();
 
     int xlen();
     int ylen();
-
+    
     float &operator()(int l, int c);
     float operator()(int l, int c) const;
     friend std::ostream &operator<<(std::ostream &os, Matrix2d &m);
+
+    void push(float v[]);
 };
 
 #endif
