@@ -1,59 +1,56 @@
-#include <iostream>
-
 #include "matrix2d.h"
 
-Matrix2d::Matrix2d(int _nl, int _nc) {
+#include <iostream>
 
-    nl = _nl;
-    nc = _nc;
+Matrix2d::Matrix2d(int _nl, int _nc)
+    : nl(_nc),
+      nc(_nc)
+{
+    m = new float *[_nl];
 
-    m = new float*[_nl];
+    m[0] = new float[_nl * _nc];
 
-    m[0] = new float[_nl * _nc]; 
+    for (int l = 1; l < _nl; l++)
+        m[l] = m[l - 1] + _nc;
 
-    for (int j = 1; j < _nl; j++)
-        m[j] = m[j - 1] + _nc;
-    
-    for (int j = 0; j < _nl; j++) 
-        for (int k = 0; k < _nc; k++)
-            m[j][k] = 0;
+    for (int l = 0; l < _nl; l++)
+        for (int c = 0; c < _nc; c++)
+            m[l][c] = 0;
 }
 
-Matrix2d::~Matrix2d() {
-
-    std::cout << "log: destrutor" << std::endl;
-    
+Matrix2d::~Matrix2d()
+{
     delete m[0];
     delete m;
 }
 
-int Matrix2d::getDimx() {
-    return nl;
-}
-
-int Matrix2d::getDimy() {
+int Matrix2d::xlen()
+{
     return nc;
 }
 
-float& Matrix2d::operator[](int index) {
-    
-    std::cout << "Linhas: " << nl << std::endl;
-
-    if (index > nl)
-        std::cout << "error: invalid index " << index << std::endl;
-
-    return *m[index];
+int Matrix2d::ylen()
+{
+    return nl;
 }
 
-
-Matrix2d Matrix2d::operator*(Matrix2d x) {
-
+float &Matrix2d::operator()(int l, int c)
+{
+    return m[l][c];
 }
 
-Matrix2d Matrix2d::operator+(Matrix2d x) {
-
+float Matrix2d::operator()(int l, int c) const
+{
+    return m[l][c];
 }
 
-Matrix2d Matrix2d::operator-(Matrix2d x) {
-
+std::ostream &operator<<(std::ostream &os, Matrix2d &m)
+{
+    for (int l = 0; l < m.xlen(); l++)
+    {
+        for (int c = 0; c < m.ylen(); c++)
+            os << m(l, c) << " ";
+        os << std::endl;
+    }
+    return os;
 }
