@@ -49,15 +49,15 @@ std::ostream &operator<<(std::ostream &os, Matrix2d &m)
     return os;
 }
 
-// Push lines to the end of the matrix
+// Converts a local allocated matrix into a dinamically one
 
-void Matrix2d::push(float v[])
+void Matrix2d::operator=(float *v)
 {
-    if (count == nl)
-        count = 0;
+    for (int l = 0; l < nl; l++)
+    {
+        float *temp = v + l * nc; // step to another line
 
-    for (int l = 0; l < nc; l++)
-        m[count][l] = v[l];
-
-    count++;
+        for (int c = 0; c < nc; c++)
+            m[l][c] = *(temp + c);
+    }
 }

@@ -20,9 +20,8 @@ public:
     
     float &operator()(int l, int c);
     float operator()(int l, int c) const;
+    void operator=(float* v);
     friend std::ostream &operator<<(std::ostream &os, Matrix2d &m);
-
-    void push(float v[]);
 };
 
 #endif
